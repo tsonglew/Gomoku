@@ -45,7 +45,6 @@ def main(stdscr):
     state_actions = {
             'Init': init,
             'Win': lambda: not_game('Win'),
-            'Gameover': lambda: not_game('Gameover'),
             'Game': game
             }
     state = 'Init'
