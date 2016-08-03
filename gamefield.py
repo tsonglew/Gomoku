@@ -82,6 +82,8 @@ class GameField(object):
 
         screen.clear()
         if self.is_win():
+            if self.current_player == 1: self.current_player+=1
+            else: self.current_player-=1
             screen.addstr('  Winner: Player%d' % self.current_player + ' !!!!', curses.color_pair(1))
         else:
             screen.addstr('   It\'s Your Turn !!', curses.color_pair(2))
