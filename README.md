@@ -22,6 +22,6 @@ gomoku on python
 
 ### Coming Soon:
 
-[x] Play with your friend
-[ ] Play with the computer
-[ ] With UI
+- [x] Play with your friend
+- [ ] Play with the computer
+- [ ] With UI
