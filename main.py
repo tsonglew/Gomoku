@@ -4,6 +4,8 @@
 import curses
 from collections import defaultdict
 from gamefield import GameField
+from player import Player
+
 
 actions = ['Up', 'Left', 'Down', 'Right', 'Confirm', 'Restart', 'Quit']
 letters = 'WASDCRQ'
@@ -50,7 +52,9 @@ def main(stdscr):
     state = 'Init'
 
 
-    curses.use_default_colors()
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
     game_field = GameField()
     state = 'Init'
 

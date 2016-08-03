@@ -3,10 +3,14 @@
 
 class GameField(object):
     def __init__(self, height=15, width=15):
+
         self.width = width
         self.height = height
+        self.player1_steps = 0
+        self.player2_steps = 0
         self.field = [[0 for i in xrange(width)] for j in xrange(height)]
         self.five_in_a_row = {}
+        self.current = (8, 8)
         self.reset()
 
     def get(self, row, col):
@@ -21,6 +25,8 @@ class GameField(object):
         for j in xrange(self.height):
             for i in xrange(self.width):
                 self.field[i][j] = 0
+        self.player1_steps = 0
+        self.player2_steps = 0
         return 0
 
     def is_win(self):
@@ -53,21 +59,40 @@ class GameField(object):
 
     def draw(self, screen, winner=None):
         """Draw the Game Field"""
-        help_string1 = '(W)Up (S)Down (A)Left (D)Right'
-        help_string2 = '(C)onfirm   (R)estart   (Q)uit'
+        import curses
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
+        curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_WHITE)
+        help_string1 = '\n(W)Up (S)Down (A)Left (D)Right\n'
+        help_string2 = '\n(C)onfirm   (R)estart   (Q)uit\n'
         if winner:
             win_string = winner.capitalize() + ' Wins!'
         else:
-            win_string = 'ERROR: No Winner!!!'
+            win_string = '\nERROR: No Winner!!!\n'
 
         def draw_lines():
-            cross = '*---' * 14 + '*'
-            down = '|  ' * 14 + '|'
-            screen.addstr(cross + '\n')
-            for i in xrange(self.width-1):
-                screen.addstr(down + '\n')
-                screen.addstr(cross + '\n')
+            for i in xrange(self.height):
+                for j in xrange(self.width):
+                    if self.field[i][j] == 0: screen.addstr(' ')
+                    elif self.field[i][j] == 1: screen.addstr('X', curses.color_pair(1))
+                    elif self.field[i][j] == 2: screen.addstr('O', curses.color_pair(2))
+                    else: screen.addstr('?')
+                    if (i*15+j+1)%15 == 0: screen.addstr('\n')
+                    else: screen.addstr('---')
+                if i in xrange(self.height-1):
+                    screen.addstr('|   '*14+'|'+'\n')
 
-        def is_step_legal(row=-1, col=-1):
-            if game_field.field[row][col] == 0:
-                return True
+        screen.clear()
+        screen.addstr('Player1: %d steps ' % self.player1_steps, curses.color_pair(1))
+        screen.addstr(' '*5)
+        screen.addstr('Player2: %d steps \n' % self.player2_steps, curses.color_pair(2))
+        draw_lines()
+        screen.addstr(help_string1)
+        screen.addstr(help_string2)
+
+    def is_step_legal(row=-1, col=-1):
+        if row not in xrange(15) or col not in xrange(15):
+            return False
+        if self.field[row][col] == 0:
+            return True
+
