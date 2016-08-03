@@ -4,7 +4,6 @@
 import curses
 from collections import defaultdict
 from gamefield import GameField
-from player import Player
 
 
 actions = ['Up', 'Left', 'Down', 'Right', 'Confirm', 'Restart', 'Quit']
@@ -42,19 +41,24 @@ def main(stdscr):
             return 'Init'
         if action == 'Quit':
             return 'Quit'
+        if action == 'Confirm':
+            game_field.field[game_field.current['row']][game_field.current['col']] = game_field.current_player
+            if game_field.current_player == 1: game_field.current_player = 2
+            else: game_field.current_player = 1
+        if game_field.move(action):
+            game_field.draw(stdscr)
+            if game_field.is_win():
+                return 'Win'
         return 'Game'
 
     state_actions = {
             'Init': init,
             'Win': lambda: not_game('Win'),
-            'Game': game
+            'Game': game,
+            'Confirm': game
             }
     state = 'Init'
 
-
-    curses.start_color()
-    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_BLACK)
     game_field = GameField()
     state = 'Init'
 
