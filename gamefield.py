@@ -10,7 +10,8 @@ class GameField(object):
         self.player2_steps = 0
         self.field = [[0 for i in xrange(width)] for j in xrange(height)]
         self.five_in_a_row = {}
-        self.current = (8, 8)
+        self.current = (7, 7)
+        self.winner = 0
         self.reset()
 
     def get(self, row, col):
@@ -65,6 +66,32 @@ class GameField(object):
         curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_WHITE)
         help_string1 = '\n(W)Up (S)Down (A)Left (D)Right\n'
         help_string2 = '\n(C)onfirm   (R)estart   (Q)uit\n'
+        self.field[7][7] = 1
+        self.field[7][6] = 1
+        self.field[7][5] = 1
+        self.field[7][8] = 1
+        self.field[7][9] = 1
+        self.field[6][7] = 1
+        self.field[9][7] = 1
+        self.field[4][3] = 1
+        self.field[5][6] = 1
+        self.field[6][5] = 1
+        self.field[3][7] = 1
+        self.field[2][7] = 1
+        self.field[2][3] = 2
+        self.field[8][10] = 2
+        self.field[6][5] = 2
+        self.field[5][4] = 2
+        self.field[3][6] = 2
+        self.field[5][5] = 2
+        self.field[2][4] = 2
+        self.field[2][11] = 2
+        self.field[7][10] = 2
+        self.field[8][10] = 2
+        self.field[6][10] = 2
+        self.player1_steps = 11
+        self.player2_steps = 10
+        self.winner = 'Player1'
         if winner:
             win_string = winner.capitalize() + ' Wins!'
         else:
@@ -84,8 +111,11 @@ class GameField(object):
 
         screen.clear()
         screen.addstr('Player1: %d steps ' % self.player1_steps, curses.color_pair(1))
-        screen.addstr(' '*5)
-        screen.addstr('Player2: %d steps \n' % self.player2_steps, curses.color_pair(2))
+        screen.addstr(' '*3)
+        screen.addstr('Player2: %d steps ' % self.player2_steps, curses.color_pair(2))
+        if self.winner != 0:
+            screen.addstr('  Winner: ' +  self.winner + ' !!!!')
+        screen.addstr('\n')
         draw_lines()
         screen.addstr(help_string1)
         screen.addstr(help_string2)
