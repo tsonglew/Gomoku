@@ -79,19 +79,22 @@ class GameField(object):
                     else: screen.addstr('---')
                 if i in xrange(self.height-1):
                     screen.addstr('|   '*14+'|'+'\n')
-
         screen.clear()
-        if self.is_win():
-            if self.current_player == 1: self.current_player+=1
-            else: self.current_player-=1
-            screen.addstr('  Winner: Player%d' % self.current_player + ' !!!!', curses.color_pair(1))
-        else:
-            screen.addstr('   It\'s Your Turn !!', curses.color_pair(2))
-        screen.addstr('\n')
-        screen.addstr('Now: Player%d \n' % self.current_player)
-        draw_lines()
-        screen.addstr(help_string1)
-        screen.addstr(help_string2)
+        try:
+            if self.is_win():
+                if self.current_player == 1: self.current_player+=1
+                else: self.current_player-=1
+                screen.addstr('  Winner: Player%d' % self.current_player + ' !!!!', curses.color_pair(1))
+            else:
+                screen.addstr('   It\'s Your Turn !!', curses.color_pair(2))
+            screen.addstr('\n')
+            screen.addstr('Now: Player%d \n' % self.current_player)
+            draw_lines()
+            screen.addstr(help_string1)
+            screen.addstr(help_string2)
+        except Exception:
+            screen.clear()
+            screen.addstr('Screen is to small! Press \'Q/q\' to return to your teminal', curses.color_pair(1))
 
     def is_step_legal(self, direction):
         after_row = self.current['row']
@@ -100,7 +103,7 @@ class GameField(object):
         elif direction == 'Right': after_col+=1
         elif direction == 'Up': after_row-=1
         elif direction == 'Down': after_row+=1
-        return  after_row in xrange(15) and after_col in xrange(15) 
+        return  after_row in xrange(15) and after_col in xrange(15)
 
     def move(self, direction):
         moves = ['Left', 'Right', 'Up', 'Down']

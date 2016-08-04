@@ -8,9 +8,6 @@ gomoku on python
 ### Attention:
 
  * Clone this repository and input `python main.py` in the terminal or console to start.
- * If your window for the terminal or console is not big enough, you may come
-   across `_curses.error: addstr() returned ERR`. Turning for a fullscreen will
-   help.
  * 'X' represents Player1 who goes first, and then comes Player2 with 'O'.
  * Question mark('?') represents the point you are on, and you could press 'C'
    to set a chessman on this point.
