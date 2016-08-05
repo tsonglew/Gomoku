@@ -5,9 +5,9 @@ class GameField(object):
     def __init__(self, height=15, width=15):
         self.width = width
         self.height = height
-        self.player1_steps = 0
-        self.player2_steps = 0
         self.current_player = 1
+        self.player_name_1 = 'Player1'
+        self.player_name_2 = 'Player2'
         self.field = [[0 for i in xrange(width)] for j in xrange(height)]
         self.current = {'row':7, 'col':7}
         self.winner = 0
@@ -25,10 +25,22 @@ class GameField(object):
         for j in xrange(self.height):
             for i in xrange(self.width):
                 self.field[i][j] = 0
-        self.player1_steps = 0
-        self.player2_steps = 0
         self.current['row'] = 7
         self.current['col'] = 7
+        self.player_name_1 = 'Player1'
+        self.player_name_2 = 'Player2'
+        self.current_player = 1
+        return 0
+
+    def addai(self):
+        """Reset the chessboard for game with AI"""
+        for j in xrange(self.height):
+            for i in xrange(self.width):
+                self.field[i][j] = 0
+        self.current['row'] = 7
+        self.current['col'] = 7
+        self.player_name_1 = 'You'
+        self.player_name_2 = 'Computer'
         self.current_player = 1
         return 0
 
@@ -65,8 +77,10 @@ class GameField(object):
         curses.start_color()
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
         curses.init_pair(2, curses.COLOR_BLUE, curses.COLOR_WHITE)
-        help_string1 = '\n(W)Up (S)Down (A)Left (D)Right\n'
-        help_string2 = '\n(C)onfirm   (R)estart   (Q)uit\n'
+        curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_RED)
+        curses.init_pair(4, curses.COLOR_CYAN, curses.COLOR_MAGENTA)
+        help_string1 = '\n(W)Up        (S)Down       (A)Left       (D)Right\n'
+        help_string2 = '\n(C)Set\n(R)Start 2 players mode\n(T)Restart single mode\n(Q)Quit\n'
 
         def draw_lines():
             for i in xrange(self.height):
@@ -82,19 +96,20 @@ class GameField(object):
         screen.clear()
         try:
             if self.is_win():
-                if self.current_player == 1: self.current_player+=1
-                else: self.current_player-=1
-                screen.addstr('  Winner: Player%d' % self.current_player + ' !!!!', curses.color_pair(1))
+                if self.current_player == 1: winner_name = self.player_name_2
+                else: winner_name = self.player_name_1
+                screen.addstr('  Winner: %s' % winner_name + ' !!!!\n\n', curses.color_pair(4))
             else:
-                screen.addstr('   It\'s Your Turn !!', curses.color_pair(2))
-            screen.addstr('\n')
-            screen.addstr('Now: Player%d \n' % self.current_player)
+                if self.current_player == 1: now_name = self.player_name_1
+                else: now_name = self.player_name_2
+                screen.addstr('It\'s Your Turn !!\n', curses.color_pair(self.current_player))
+                screen.addstr('Now: %s \n' % now_name, curses.color_pair(self.current_player))
             draw_lines()
             screen.addstr(help_string1)
             screen.addstr(help_string2)
         except Exception:
             screen.clear()
-            screen.addstr('Screen is to small! Press \'Q/q\' to return to your teminal', curses.color_pair(1))
+            screen.addstr('Window too small... Press \'Q/q\' to return to quit', curses.color_pair(3))
 
     def is_step_legal(self, direction):
         after_row = self.current['row']
@@ -119,3 +134,7 @@ class GameField(object):
                 return True
             else:
                 return False
+
+    def evaluation(self):
+        field = self.field
+        pass

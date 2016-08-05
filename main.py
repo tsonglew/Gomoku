@@ -1,13 +1,14 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 import curses
 from collections import defaultdict
 from gamefield import GameField
 
 
-actions = ['Up', 'Left', 'Down', 'Right', 'Confirm', 'Restart', 'Quit']
-letters = 'WASDCRQ'
+actions = ['Up', 'Left', 'Down', 'Right', 'Confirm', 'Restart', 'AddAI', 'Quit']
+letters = 'WASDCRTQ'
 letter_codes = [ord(ch) for ch in letters+letters.lower()]
 actions_dict = dict(zip(letter_codes, actions*2))
 
@@ -26,6 +27,10 @@ def main(stdscr):
         game_field.reset()
         return 'Game'
 
+    def addai():
+        game_field.addai()
+        return 'Game'
+
     def not_game(state):
         game_field.draw(stdscr)
         action = get_user_action(stdscr)
@@ -39,6 +44,8 @@ def main(stdscr):
         action = get_user_action(stdscr)
         if action == 'Restart':
             return 'Init'
+        if action == 'AddAI':
+            return 'AddAI'
         if action == 'Quit':
             return 'Quit'
         if action == 'Confirm':
@@ -55,7 +62,8 @@ def main(stdscr):
             'Init': init,
             'Win': lambda: not_game('Win'),
             'Game': game,
-            'Confirm': game
+            'Confirm': game,
+            'AddAI': addai
             }
     state = 'Init'
 
