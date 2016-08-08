@@ -40,6 +40,7 @@ def main(stdscr):
         return responses[action]
 
     def game():
+        import time
         game_field.draw(stdscr)
         action = get_user_action(stdscr)
         if action == 'Restart':
@@ -49,9 +50,18 @@ def main(stdscr):
         if action == 'Quit':
             return 'Quit'
         if action == 'Confirm':
-            game_field.field[game_field.current['row']][game_field.current['col']] = game_field.current_player
-            if game_field.current_player == 1: game_field.current_player = 2
-            else: game_field.current_player = 1
+            if game_field.field[game_field.current['row']][game_field.current['col']] == 0:
+                game_field.field[game_field.current['row']][game_field.current['col']] = game_field.current_player
+                if game_field.mode == 1:
+                    if game_field.current_player == 1: game_field.current_player = 2
+                    else: game_field.current_player = 1
+                elif game_field.mode == 2:
+                    if game_field.current_player == 1: game_field.current_player = 3
+                    else:
+                        time.sleep(1)
+                        game_field.current_player = 1
+            else:
+                pass
         if game_field.move(action):
             game_field.draw(stdscr)
             if game_field.is_win():
