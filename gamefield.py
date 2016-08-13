@@ -141,7 +141,6 @@ class GameField(object):
                 return False
 
     def aimove(self):
-        field = self.field
         # 1. winning5: 100 p
         # 2. living4: 90 p
         # 3. double dead4: 90 p
@@ -155,11 +154,57 @@ class GameField(object):
         # 11. living2: 20 p
         # 12. dead2: 10 p
         # 13. single: 0 p
-        points = 0
+        def check_living(field, num):
+            """Calculate the living chessmen"""
+            moves = [(1, -1), (1, 0), (1, 1), (0, 1)]
+            for i in xrange(5):
+                for j in xrange(5):
+                    if field[i][j] == 3:
+                        for move in moves:
+                            x, y = i, j
+                            chessman_count = 0
+                            for m in xrange(num+2):
+                                if m == 0 or m == num+1:
+                                    if field[x][y] != 0:
+                                        break
+                                elif m > 0 and m < num+1:
+                                    if field[x][y] != 3:
+                                        break
+                                x += move[0]
+                                y += move[1]
+                                chessman_count += 1
+                            if chessman_count == num+2:
+                                return True
+            return False
 
-        def check_one(row, col, field):
+        def check_dead(filed, num):
+            """Calculate the dead chessmen"""
+            moves = [(1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]
+            for i in xrange(5):
+                for j in xrange(5):
+                    if field[i][j] == 1:
+                        for move in moves:
+                            x, y = i, j
+                            chessman_count = 0
+                            for m in xrange(num+2):
+                                if m == 0:
+                                    if field[x][y] != 1:
+                                        break
+                                elif m > 0 and m < (num+1):
+                                    if field[x][y] != 3:
+                                        break
+                                elif m == (num+1):
+                                    if field[x][y] != 0:
+                                        break
+                                x += move[0]
+                                y += move[1]
+                                chessman_count += 1
+                            if chessman_count == (num+2):
+                                return True
+            return False
+
+        def check_winning(field):
             """Check for winning 5"""
-            field[row][col] = 3
             moves = [(1, -1), (1, 0), (1, 1), (0, 1)]
             for i in xrange(5):
                 for j in xrange(5):
@@ -177,59 +222,33 @@ class GameField(object):
                                 return True
             return False
 
-       def check_two(row, col, field):
-           """Check for living 4"""
-           field[row][col] = 3
-           moves = [(1, -1), (1, 0), (1, 1), (0, 1)]
-           for i in xrange(5):
-               for j in xrange(5):
-                   if field[i][j] == 3:
-                       for move in moves:
-                           x, y = i, j
-                           chessman_count = 0
-                           for m in xrange(6):
-                               if chessman_count == 0:
-                                   if field[x][y] != 0:
-                                       break
-                               elif chessman_count>0 and chessman_count<5:
-                                   if field[x][y] != 3:
-                                       break
-                               elif chessman_count == 5:
-                                   if field[x][y] != 0:
-                                       break
-                               x += move[0]
-                               y += move[1]
-                               chessman_count += 1
-                           if chessman_count == 6:
-                               return True
-            return False
+        point = 0
+        move = {'row': -1, 'col': -1}
 
-        def check_three(row, col, field):
-            """Check for double dead 4"""
-            field[row][col] = 3
-            moves = [(1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]
-            dead_four = 0
-            for i in xrange(5):
-                for j in xrange(5):
-                    if field[i][j] == 1:
-                        for move in moves:
-                            x, y = i, j
-                            chessman_count = 0
-                            for m in xrange(6):
-                                if chessman_count == 0:
-                                    if field[x][y] != 1:
-                                        break
-                                elif chessman_count>0 and chessman_count<5:
-                                    if field[x][y] != 3:
-                                        break
-                                elif chessman_count == 5:
-                                    if field[x][y] != 0:
-                                        break
-                                x += move[0]
-                                y += move[1]
-                                chessman_count += 1
-                            if chessman_count == 6:
-                                dead_four += 1
-                                if dead_four == 2:
-                                    return True
-            return False
+        for i in xrange(self.height):
+            for j in xrange(self.width):
+                field = self.field
+                field[i][j] = 3
+                ipoint = 0
+                if check_winning(field):
+                    ipoint = 999999
+                elif check_living(field, 4):
+                    ipoint += 90
+                elif check_living(field, 4) and check_dead(field, 3):
+                    ipoint += 90
+                elif check_dead(field, 3) and check_living(field, 3):
+                    ipoint += 70
+                elif check_dead(field, 4):
+                    ipoint += 60
+                elif check_living(field, 3):
+                    ipoint += 50
+                elif check_dead(field, 3):
+                    ipoint += 30
+                elif check_living(field, 2):
+                    ipoint += 20
+                elif check_dead(field, 2):
+                    ipoint += 10
+                if ipoint > point:
+                    move['row'] = i
+                    move['col'] = j
+                    point = ipoint
