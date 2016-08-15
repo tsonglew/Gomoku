@@ -36,6 +36,7 @@ def main(stdscr):
         action = get_user_action(stdscr)
         responses = defaultdict(lambda: state)
         responses['Restart'] = 'Restart'
+        responses['AddAI'] = 'AddAI'
         responses['Quit'] = 'Quit'
         return responses[action]
 
@@ -49,24 +50,26 @@ def main(stdscr):
             return 'AddAI'
         if action == 'Quit':
             return 'Quit'
+        if game_field.current_player == 3:
+            game_field.aimove()
+            if game_field.is_win():
+                return 'Win'
+            game_field.current_player = 1
+            return 'Game'
         if action == 'Confirm':
             if game_field.field[game_field.current['row']][game_field.current['col']] == 0:
                 game_field.field[game_field.current['row']][game_field.current['col']] = game_field.current_player
+                if game_field.is_win():
+                    return 'Win'
                 if game_field.mode == 1:
                     if game_field.current_player == 1: game_field.current_player = 2
                     else: game_field.current_player = 1
                 elif game_field.mode == 2:
-                    if game_field.current_player == 1: game_field.current_player = 3
-                    else:
-                        time.sleep(1)
-                        game_field.current_player = 1
-            else:
-                pass
+                    game_field.current_player = 3
+            return 'Game'
         if game_field.move(action):
             game_field.draw(stdscr)
-            if game_field.is_win():
-                return 'Win'
-        return 'Game'
+            return 'Game'
 
     state_actions = {
             'Init': init,
@@ -81,6 +84,9 @@ def main(stdscr):
     state = 'Init'
 
     while state != 'Quit':
-        state = state_actions[state]()
+        try:
+            state = state_actions[state]()
+        except KeyError:
+            pass
 
 curses.wrapper(main)
