@@ -54,6 +54,7 @@ def main(stdscr):
             if game_field.aimove():
                 pass
             else:
+                game_field.concede = 1
                 return 'Win'
             if game_field.is_win():
                 return 'Win'

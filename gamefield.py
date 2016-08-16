@@ -7,6 +7,7 @@ class GameField(object):
         self.height = height
         self.mode = 1
         self.point = 0
+        self.concede = 0
         self.current_player = 1
         self.player_name_1 = 'Player1'
         self.player_name_2 = 'Player2'
@@ -48,6 +49,7 @@ class GameField(object):
         self.player_name_2 = 'Player2'
         self.current_player = 1
         self.point = 0
+        self.concede = 0
         return 0
 
     def addai(self):
@@ -62,6 +64,7 @@ class GameField(object):
         self.player_name_3 = 'Computer'
         self.current_player = 1
         self.point = 0
+        self.concede = 0
         return 0
 
     def is_win(self):
@@ -120,6 +123,8 @@ class GameField(object):
                     if self.current_player == 3: winner_name = self.player_name_3
                     else: winner_name = self.player_name_1
                 screen.addstr('  Winner: %s' % winner_name + ' !!!!\n\n', curses.color_pair(4))
+            elif self.concede == 1:
+                screen.addstr('  Computer has conceded and left.. You are the winner.!! \n\n', curses.color_pair(4))
             else:
                 if self.current_player == 2: now_name = self.player_name_2
                 elif self.current_player == 3: now_name = self.player_name_3
