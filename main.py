@@ -35,8 +35,8 @@ def main(stdscr):
         game_field.draw(stdscr)
         action = get_user_action(stdscr)
         responses = defaultdict(lambda: state)
-        responses['Restart'] = 'Restart'
         responses['AddAI'] = 'AddAI'
+        responses['Restart'] = 'Restart'
         responses['Quit'] = 'Quit'
         return responses[action]
 
@@ -51,7 +51,10 @@ def main(stdscr):
         if action == 'Quit':
             return 'Quit'
         if game_field.current_player == 3:
-            game_field.aimove()
+            if game_field.aimove():
+                pass
+            else:
+                return 'Win'
             if game_field.is_win():
                 return 'Win'
             game_field.current_player = 1

@@ -128,7 +128,7 @@ class GameField(object):
                     screen.addstr('It\'s Your Turn !!\n', curses.color_pair(self.current_player))
                     screen.addstr('Now: %s \n' % now_name, curses.color_pair(self.current_player))
                 else:
-                    screen.addstr('Computer is thinking...\nPress \'W\' to push it!!\n', curses.color_pair(2))
+                    screen.addstr('Computer is thinking...\nPress \'C\' to push it!!\n', curses.color_pair(2))
             draw_lines()
             screen.addstr(help_string1)
             screen.addstr(help_string2)
@@ -355,152 +355,65 @@ class GameField(object):
             return False
 
         move = {'row': -1, 'col': -1}
-
         point = 0
-        l4_count = check_living(self.field, 4)
-        l3_count = check_living(self.field, 3)
-        l2_count = check_living(self.field, 2)
-        d4_count = check_dead(self.field, 4)
-        d3_count = check_dead(self.field, 3)
-        d2_count = check_dead(self.field, 2)
-        d1_count = check_dead(self.field, 1)
-        de4_count = check_destroy(self.field, 4)
-        de3_count = check_destroy(self.field, 3)
-        de2_count = check_destroy(self.field, 2)
-        c4_count = check_cut(self.field, 4)
-        c3_count = check_cut(self.field, 3)
-        c2_count = check_cut(self.field, 2)
-        c1_count = check_cut(self.field, 1)
-
-        if de4_count >= 1:
-            point += 300
-        elif l4_count>=1 or d4_count>=2 or (l3_count>=1 and d4_count>=1):
-            point += 200
-        elif special_2(self.field):
-            point += 150
-        elif special_1(self.field):
-            point += 85
-        elif l3_count >= 2:
-            point += 80
-        elif l3_count >= 1 and d3_count >= 1:
-            point += 70
-        elif d4_count >= 1:
-            point += 60
-        elif l3_count >= 1:
-            point += 50
-        elif (d3_count>=1 and l2_count>=1) or l2_count>=2:
-            point += 40
-        elif d3_count >= 1:
-            point += 30
-        elif l2_count >= 1:
-            point += 20
-        elif d2_count >= 1:
-            point += 10
-        elif d1_count >= 1:
-            point += 5
-
-        # Cut and Destroy points count
-        if c4_count >= 1:
-            point += 500
-        if c3_count >= 1:
-            point += 200
-            if c3_count >= 2:
-                point += 100
-        if c2_count >= 1:
-            point += 15
-            if c2_count >= 2:
-                point += 10
-        if c1_count >= 1:
-            point += 5
-            if c1_count >= 2:
-                point += 5
-        if de3_count >= 1:
-            point += 40
-            if de3_count >= 2:
-                point += 10
-        if de2_count >= 1:
-            point += 20
-            if de2_count >= 2:
-                point += 10
-        xpoint = 0
         for i in xrange(self.height):
             for j in xrange(self.width):
                 if self.field[i][j] == 0:
                     self.field[i][j] = 3
                     ipoint = 0
+                    l4_count = check_living(self.field, 4)
+                    l3_count = check_living(self.field, 3)
+                    l2_count = check_living(self.field, 2)
+                    l1_count = check_living(self.field, 1)
+                    d4_count = check_dead(self.field, 4)
+                    d3_count = check_dead(self.field, 3)
+                    d2_count = check_dead(self.field, 2)
+                    d1_count = check_dead(self.field, 1)
+                    de4_count = check_destroy(self.field, 4)
+                    de3_count = check_destroy(self.field, 3)
+                    de2_count = check_destroy(self.field, 2)
+                    de1_count = check_destroy(self.field, 1)
+                    c4_count = check_cut(self.field, 4)
+                    c3_count = check_cut(self.field, 3)
+                    c2_count = check_cut(self.field, 2)
+                    c1_count = check_cut(self.field, 1)
+
+                    # Winning
                     if check_winning(self.field):
-                        ipoint = 999999
-                    else:
-                        l4_count = check_living(self.field, 4)
-                        l3_count = check_living(self.field, 3)
-                        l2_count = check_living(self.field, 2)
-                        d4_count = check_dead(self.field, 4)
-                        d3_count = check_dead(self.field, 3)
-                        d2_count = check_dead(self.field, 2)
-                        d1_count = check_dead(self.field, 1)
-                        de4_count = check_destroy(self.field, 4)
-                        de3_count = check_destroy(self.field, 3)
-                        de2_count = check_destroy(self.field, 2)
-                        c4_count = check_cut(self.field, 4)
-                        c3_count = check_cut(self.field, 3)
-                        c2_count = check_cut(self.field, 2)
-                        c1_count = check_cut(self.field, 1)
+                        ipoint += 999999
 
-                        if de4_count >= 1:
-                            ipoint += 99999
-                        elif l4_count>=1 or d4_count>=2 or (l3_count>=1 and d4_count>=1):
-                            ipoint += 250
-                        elif special_2(self.field):
-                            ipoint += 200
-                        elif special_1(self.field):
-                            ipoint += 85
-                        elif l3_count >= 2:
-                            ipoint += 80
-                        elif l3_count >= 1 and d3_count >= 1:
-                            ipoint += 70
-                        elif d4_count >= 1:
-                            ipoint += 60
-                        elif l3_count >= 1:
-                            ipoint += 50
-                        elif (d3_count>=1 and l2_count>=1) or l2_count>=2:
-                            ipoint += 40
-                        elif d3_count >= 1:
-                            ipoint += 30
-                        elif l2_count >= 1:
-                            ipoint += 20
-                        elif d2_count >= 1:
-                            ipoint += 10
-                        elif d1_count >= 1:
-                            ipoint += 5
+                    # Special Checks
 
-                        # Cut and Destroy points count
-                        if c4_count >= 1:
-                            ipoint +=500
-                        if c3_count >= 1:
-                            ipoint += 200
-                            if c3_count >= 2:
-                                ipoint += 100
-                        if c2_count >= 1:
-                            ipoint += 15
-                            if c2_count >= 2:
-                                ipoint += 10
-                        if c1_count >= 1:
-                            ipoint += 5
-                            if c1_count >= 2:
-                                ipoint += 5
-                        if de3_count >= 1:
-                            ipoint += 40
-                            if de3_count >= 2:
-                                ipoint += 10
-                        if de2_count >= 1:
-                            ipoint += 20
-                            if de2_count >= 2:
-                                ipoint += 10
-                    if (ipoint-point) > xpoint:
+                    # Defence Points
+                    ipoint += de4_count*999
+                    ipoint += de3_count*100
+                    ipoint += de2_count*35
+                    ipoint += de1_count*8
+
+                    ipoint += c4_count*100
+                    ipoint += c3_count*90
+                    ipoint += c2_count*30
+                    ipoint += c1_count*1
+
+                    # Offence Points
+                    ipoint += l4_count*110
+                    ipoint += l3_count*50
+                    ipoint += l2_count*20
+                    ipoint += l1_count*0.5
+
+                    ipoint += d4_count*45
+                    ipoint += d3_count*20
+                    ipoint += d2_count*10
+                    ipoint += d1_count*0.1
+
+                    if ipoint > point:
                         move['row'] = i
                         move['col'] = j
-                        xpoint = (ipoint-point)
+                        point = ipoint
                     self.field[i][j] = 0
-        #print xpoint, move['row'], move['col']
-        self.field[move['row']][move['col']] = 3
-        return True
+        #print point, move['row'], move['col']
+        if point > 0:
+            self.field[move['row']][move['col']] = 3
+            return True
+        else:
+            return False
