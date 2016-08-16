@@ -54,7 +54,7 @@ def main(stdscr):
             if game_field.aimove():
                 pass
             else:
-                game_field.concede = 1
+                self.concede = 1
                 return 'Win'
             if game_field.is_win():
                 return 'Win'
@@ -73,7 +73,7 @@ def main(stdscr):
             return 'Game'
         if game_field.move(action):
             game_field.draw(stdscr)
-            return 'Game'
+        return 'Game'
 
     state_actions = {
             'Init': init,
@@ -88,9 +88,6 @@ def main(stdscr):
     state = 'Init'
 
     while state != 'Quit':
-        try:
-            state = state_actions[state]()
-        except KeyError:
-            continue
+        state = state_actions[state]()
 
 curses.wrapper(main)
