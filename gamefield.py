@@ -428,7 +428,7 @@ class GameField(object):
                     ipoint += c1_count*1
 
                     # Offence Points
-                    ipoint += l4_count*110
+                    ipoint += l4_count*150
                     ipoint += l3_count*50
                     ipoint += l2_count*20
                     ipoint += l1_count*0.5
