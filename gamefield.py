@@ -99,7 +99,7 @@ class GameField(object):
         curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_RED)
         curses.init_pair(4, curses.COLOR_CYAN, curses.COLOR_MAGENTA)
         help_string1 = '\n(W)Up        (S)Down       (A)Left       (D)Right\n'
-        help_string2 = '\n(C)Set[Double click in single mode]\n(R)Start 2 players mode\n(T)Restart single mode\n(Q)Quit\n'
+        help_string2 = '\n(C)Set[Double click in single mode]\n(R)Start 2 players mode\n(T)Start single mode\n(Q)Quit\n'
 
         def draw_lines():
             for i in xrange(self.height):
