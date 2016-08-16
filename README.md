@@ -15,7 +15,7 @@
    direction marks to move the question mark and you will see it again.
  * Press 'R' to start over.
  * Press 'T' to play with the computer.
- * While the computer is thinking.
+ * While the computer is thinking, you could press 'C' to push it.
  * Press 'Q' to return to your terminal or console.
 
 ### Coming Soon:
