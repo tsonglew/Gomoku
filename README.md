@@ -2,7 +2,7 @@
  * Play with your friend or the computer
 
 ### Steps
- * Clone this repository `git clone https://github.com/kasheemlew/Gomoku.git
+ * Clone this repository `git clone https://github.com/kasheemlew/Gomoku.git`
  * Execute `python main.py` to start the game
 
 ### Attention:
