@@ -99,14 +99,14 @@ class GameField(object):
         curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_RED)
         curses.init_pair(4, curses.COLOR_CYAN, curses.COLOR_MAGENTA)
         help_string1 = '\n(W)Up        (S)Down       (A)Left       (D)Right\n'
-        help_string2 = '\n(C)Set\n(R)Start 2 players mode\n(T)Restart single mode\n(Q)Quit\n'
+        help_string2 = '\n(C)Set[Double click in single mode]\n(R)Start 2 players mode\n(T)Restart single mode\n(Q)Quit\n'
 
         def draw_lines():
             for i in xrange(self.height):
                 for j in xrange(self.width):
                     if self.field[i][j] == 1: screen.addstr('X', curses.color_pair(1))
                     elif self.field[i][j] == 2 or self.field[i][j] == 3: screen.addstr('O', curses.color_pair(2))
-                    elif self.current['row']==i and self.current['col']==j: screen.addstr('?')
+                    elif self.current['row']==i and self.current['col']==j: screen.addstr('?', curses.color_pair(3))
                     elif self.field[i][j] == 0: screen.addstr(' ')
                     if (i*15+j+1)%15 == 0: screen.addstr('\n')
                     else: screen.addstr('---')
@@ -337,6 +337,30 @@ class GameField(object):
                                 return True
             return False
 
+        def special_3(field):
+            """check  x x x o x  situation """
+            moves = [(1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]
+            for i in xrange(self.height):
+                for j in xrange(self.width):
+                    if field[i][j] == 0:
+                        for move in moves:
+                            x, y = i, j
+                            chessman_count = 0
+                            for m in xrange(5):
+                                if m == 1: s = 3
+                                else: s = 1
+                                try:
+                                    if field[x][y] != s:
+                                        break
+                                except IndexError:
+                                    break
+                                x += move[0]
+                                y += move[1]
+                                chessman_count += 1
+                            if chessman_count == 5:
+                                return True
+            return False
+
         def check_winning(field):
             """Check for winning 5"""
             moves = [(1, -1), (1, 0), (1, 1), (0, 1)]
@@ -388,9 +412,12 @@ class GameField(object):
                         ipoint += 999999
 
                     # Special Checks
+                    if special_1(self.field): ipoint += 90
+                    if special_2(self.field): ipoint += 500
+                    if special_3(self.field): ipoint += 500
 
                     # Defence Points
-                    ipoint += de4_count*999
+                    ipoint += de4_count*500
                     ipoint += de3_count*100
                     ipoint += de2_count*35
                     ipoint += de1_count*8

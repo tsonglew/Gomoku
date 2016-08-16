@@ -91,6 +91,6 @@ def main(stdscr):
         try:
             state = state_actions[state]()
         except KeyError:
-            pass
+            continue
 
 curses.wrapper(main)
