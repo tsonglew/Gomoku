@@ -80,7 +80,8 @@ def main(stdscr):
             'Win': lambda: not_game('Win'),
             'Game': game,
             'Confirm': game,
-            'AddAI': addai
+            'AddAI': addai,
+            'Restart': game
             }
     state = 'Init'
 

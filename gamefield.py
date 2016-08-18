@@ -65,6 +65,7 @@ class GameField(object):
         self.current_player = 1
         self.point = 0
         self.concede = 0
+        self.field[7][7] = 3
         return 0
 
     def is_win(self):
@@ -170,22 +171,7 @@ class GameField(object):
 
 
     def aimove(self):
-        """
-        1.  [x]winning5: 100 p
-        2.  [x]living4: 90 p
-        3.  [ ]double dead4: 90 p
-        4.  [x]living4 dead3: 90 p
-        5.  [ ]double living3: 80 p
-        6.  [x]dead3 living3: 70 p
-        7.  [x]dead4: 60 p
-        8.  [x]living3: 50 p
-        9.  [ ]dead3 living2: 40 p
-        10. [ ]double living2: 40 p
-        11. [x]dead3: 30 p
-        12. [x]living2: 20 p
-        13. [x]dead2: 10 p
-        14. [-]single: 0 p
-        """
+        """AI evaluation and move"""
         def check_living(field, num):
             """Calculate the living chessmen"""
             moves = [(1, -1), (1, 0), (1, 1), (0, 1)]
@@ -390,6 +376,12 @@ class GameField(object):
                 if self.field[i][j] == 0:
                     self.field[i][j] = 3
                     ipoint = 0
+                    # Winning
+                    if check_winning(self.field):
+                        return True
+                    # ipoint += 999999
+                    #    break
+
                     l4_count = check_living(self.field, 4)
                     l3_count = check_living(self.field, 3)
                     l2_count = check_living(self.field, 2)
@@ -407,9 +399,7 @@ class GameField(object):
                     c2_count = check_cut(self.field, 2)
                     c1_count = check_cut(self.field, 1)
 
-                    # Winning
-                    if check_winning(self.field):
-                        ipoint += 999999
+
 
                     # Special Checks
                     if special_1(self.field): ipoint += 90
