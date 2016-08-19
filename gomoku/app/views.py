@@ -7,12 +7,12 @@ import json
 
 @app.route('/field/')
 def field():
+    field = [[0 for m in xrange(15)] for n in xrange(15)]
     string = request.args.get('field')
-    field = [[0 for i in xrange(15)] for j in xrange(15)]
     for i in string:
         for row in xrange(15):
             for col in xrange(15):
-                field[row][col] = int(i)
+                field[row][col] = int(string[row*15+col])
 
     def check_living(field, num):
         """Calculate the living chessmen"""
@@ -273,7 +273,4 @@ def field():
                     move['col'] = j
                     point = ipoint
                 field[i][j] = 0
-    if point > 0:
-        return json.dumps([move])
-    else:
-        return False
+    return json.dumps(move)
