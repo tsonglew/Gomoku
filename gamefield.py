@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 
 
+try:
+    xrange
+except NameError:
+    xrange = range
+
+
 class GameField(object):
     def __init__(self, height=15, width=15):
         self.width = width
@@ -172,6 +178,27 @@ class GameField(object):
 
     def aimove(self):
         """AI evaluation and move"""
+
+        def check_single(field):
+            """Calculate the single chessman"""
+            single_count = 0
+            for i in xrange(self.height):
+                for j in xrange(self.height):
+                    if field[i][j] == 3:
+                        if (i-1)>=0 and (j-1)>=0 and (i+1)<15 and (j+1)<15:
+                            lu = field[i-1][j-1]
+                            ld = field[i+1][j-1]
+                            l = field[i][j-1]
+                            r = field[i][j+1]
+                            ru = field[i-1][j+1]
+                            rd = field[i+1][j+1]
+                            u = field[i-1][j]
+                            d = field[i+1][j]
+                            if (lu+ld+l+r+ru+rd+u+d) == 0:
+                                single_count += 1
+            return single_count
+
+
         def check_living(field, num):
             """Calculate the living chessmen"""
             moves = [(1, -1), (1, 0), (1, 1), (0, 1)]
@@ -385,7 +412,7 @@ class GameField(object):
                     l4_count = check_living(self.field, 4)
                     l3_count = check_living(self.field, 3)
                     l2_count = check_living(self.field, 2)
-                    l1_count = check_living(self.field, 1)
+                    l1_count = check_single(self.field)
                     d4_count = check_dead(self.field, 4)
                     d3_count = check_dead(self.field, 3)
                     d2_count = check_dead(self.field, 2)
@@ -399,6 +426,23 @@ class GameField(object):
                     c2_count = check_cut(self.field, 2)
                     c1_count = check_cut(self.field, 1)
 
+                    # DEBUG LOG
+                    # if l4_count: print('l4: %d' % l4_count)
+                    # if l3_count: print('l3: %d' % l3_count)
+                    # if l2_count: print('l2: %d' % l2_count)
+                    # if l1_count: print('l1: %d' % l1_count)
+                    # if d4_count: print('d4: %d' % d4_count)
+                    # if d3_count: print('d3: %d' % d3_count)
+                    # if d2_count: print('d2: %d' % d2_count)
+                    # if d1_count: print('d1: %d' % d1_count)
+                    # if de4_count: print('de4: %d' % de4_count)
+                    # if de3_count: print('de3: %d' % de3_count)
+                    # if de2_count: print('de2: %d' % de2_count)
+                    # if de1_count: print('de1: %d' % de1_count)
+                    # if c4_count: print('c4: %d' % c4_count)
+                    # if c3_count: print('c3: %d' % c3_count)
+                    # if c2_count: print('c2: %d' % c2_count)
+                    # if c1_count: print('c1: %d' % c1_count)
 
 
                     # Special Checks
