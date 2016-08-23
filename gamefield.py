@@ -453,18 +453,18 @@ class GameField(object):
                     # Defence Points
                     ipoint += de4_count*500
                     ipoint += de3_count*100
-                    ipoint += de2_count*35
+                    ipoint += de2_count*37
                     ipoint += de1_count*8
 
                     ipoint += c4_count*100
                     ipoint += c3_count*90
-                    ipoint += c2_count*30
+                    ipoint += c2_count*36
                     ipoint += c1_count*1
 
                     # Offence Points
                     ipoint += l4_count*140
-                    ipoint += l3_count*50
-                    ipoint += l2_count*15
+                    ipoint += l3_count*70
+                    ipoint += l2_count*23
                     ipoint += l1_count*0.5
 
                     ipoint += d4_count*45
