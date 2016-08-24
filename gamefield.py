@@ -219,6 +219,8 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
+                                if x < 0 or x >14 or y < 0 or y > 14:
+                                    break
                                 chessman_count += 1
                             if chessman_count == num+2:
                                 living_count += 1
@@ -233,6 +235,7 @@ class GameField(object):
                     if field[i][j] == 1:
                         for move in moves:
                             x, y = i, j
+
                             chessman_count = 0
                             for m in xrange(num+2):
                                 if m == 0: s = 1
@@ -245,6 +248,8 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
+                                if x < 0 or x >14 or y < 0 or y > 14:
+                                    break
                                 chessman_count += 1
                             if chessman_count == (num+2):
                                 dead_count += 1
@@ -271,6 +276,8 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
+                                if x < 0 or x >14 or y < 0 or y > 14:
+                                    break
                                 chessman_count += 1
                             if chessman_count == (num+2):
                                 cut_count += 1
@@ -287,15 +294,31 @@ class GameField(object):
                             x, y = i, j
                             chessman_count = 0
                             for m in xrange(num+2):
-                                if m == 0 or m == num+1: s = 3
-                                elif m > 0 and m < num+1: s = 1
-                                try:
-                                    if field[x][y] != s:
+                                if m == 0 or m == num+1:
+                                    try:
+                                        if field[x][y] != 3:
+                                            break
+                                    except IndexError:
                                         break
-                                except IndexError:
-                                    break
+                                elif m == num+1:
+                                    try:
+                                        if field[x][y] != 3:
+                                            break
+                                    except IndexError:
+                                        x += move[0]
+                                        y += move[1]
+                                        chessman_count += 2
+                                        break
+                                elif m > 0 and m < num+1:
+                                    try:
+                                        if field[x][y] != 1:
+                                            break
+                                    except IndexError:
+                                        break
                                 x += move[0]
                                 y += move[1]
+                                if x < 0 or x >14 or y < 0 or y > 14:
+                                    break
                                 chessman_count += 1
                             if chessman_count == num+2:
                                 destroy_count += 1
@@ -321,6 +344,8 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
+                                if x < 0 or x >14 or y < 0 or y > 14:
+                                    break
                                 chessman_count += 1
                             if chessman_count == 6:
                                 return True
@@ -345,6 +370,8 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
+                                if x < 0 or x >14 or y < 0 or y > 14:
+                                    break
                                 chessman_count += 1
                             if chessman_count == 5:
                                 return True
@@ -369,6 +396,8 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
+                                if x < 0 or x >14 or y < 0 or y > 14:
+                                    break
                                 chessman_count += 1
                             if chessman_count == 5:
                                 return True
@@ -406,8 +435,6 @@ class GameField(object):
                     # Winning
                     if check_winning(self.field):
                         return True
-                    # ipoint += 999999
-                    #    break
 
                     l4_count = check_living(self.field, 4)
                     l3_count = check_living(self.field, 3)
@@ -462,7 +489,7 @@ class GameField(object):
                     ipoint += c1_count*1
 
                     # Offence Points
-                    ipoint += l4_count*140
+                    ipoint += l4_count*200
                     ipoint += l3_count*70
                     ipoint += l2_count*23
                     ipoint += l1_count*0.5
