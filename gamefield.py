@@ -218,9 +218,9 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                chessman_count += 1
                                 if x<0 or x>14 or y<0 or y>14:
                                     break
+                                chessman_count += 1
                             if chessman_count == num+2:
                                 living_count += 1
             return living_count
@@ -246,9 +246,9 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                chessman_count += 1
                                 if x<0 or x>14 or y<0 or y>14:
                                     break
+                                chessman_count += 1
                             if chessman_count == (num+2):
                                 dead_count += 1
             return dead_count
@@ -274,9 +274,9 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                chessman_count += 1
                                 if x<0 or x>14 or y<0 or y>14:
                                     break
+                                chessman_count += 1
                             if chessman_count == (num+2):
                                 cut_count += 1
             return cut_count
@@ -301,9 +301,9 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                chessman_count += 1
                                 if x<0 or x>14 or y<0 or y>14:
                                     break
+                                chessman_count += 1
                             if chessman_count == num+2:
                                 destroy_count += 1
             return destroy_count
