@@ -198,7 +198,6 @@ class GameField(object):
                                 single_count += 1
             return single_count
 
-
         def check_living(field, num):
             """Calculate the living chessmen"""
             moves = [(1, -1), (1, 0), (1, 1), (0, 1)]
@@ -219,9 +218,9 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                if x < 0 or x >14 or y < 0 or y > 14:
-                                    break
                                 chessman_count += 1
+                                if x<0 or x>14 or y<0 or y>14:
+                                    break
                             if chessman_count == num+2:
                                 living_count += 1
             return living_count
@@ -235,7 +234,6 @@ class GameField(object):
                     if field[i][j] == 1:
                         for move in moves:
                             x, y = i, j
-
                             chessman_count = 0
                             for m in xrange(num+2):
                                 if m == 0: s = 1
@@ -248,9 +246,9 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                if x < 0 or x >14 or y < 0 or y > 14:
-                                    break
                                 chessman_count += 1
+                                if x<0 or x>14 or y<0 or y>14:
+                                    break
                             if chessman_count == (num+2):
                                 dead_count += 1
             return dead_count
@@ -276,9 +274,9 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                if x < 0 or x >14 or y < 0 or y > 14:
-                                    break
                                 chessman_count += 1
+                                if x<0 or x>14 or y<0 or y>14:
+                                    break
                             if chessman_count == (num+2):
                                 cut_count += 1
             return cut_count
@@ -294,35 +292,49 @@ class GameField(object):
                             x, y = i, j
                             chessman_count = 0
                             for m in xrange(num+2):
-                                if m == 0 or m == num+1:
-                                    try:
-                                        if field[x][y] != 3:
-                                            break
-                                    except IndexError:
+                                if m == 0 or m == num+1: s = 3
+                                elif m > 0 and m < num+1: s = 1
+                                try:
+                                    if field[x][y] != s:
                                         break
-                                elif m == num+1:
-                                    try:
-                                        if field[x][y] != 3:
-                                            break
-                                    except IndexError:
-                                        x += move[0]
-                                        y += move[1]
-                                        chessman_count += 1
-                                        break
-                                elif m > 0 and m < num+1:
-                                    try:
-                                        if field[x][y] != 1:
-                                            break
-                                    except IndexError:
-                                        break
+                                except IndexError:
+                                    break
                                 x += move[0]
                                 y += move[1]
-                                if x < 0 or x >14 or y < 0 or y > 14:
-                                    break
                                 chessman_count += 1
+                                if x<0 or x>14 or y<0 or y>14:
+                                    break
                             if chessman_count == num+2:
                                 destroy_count += 1
             return destroy_count
+
+        def check_out_destroy(field, num):
+            """Calculate the out of index destroy chessmen"""
+            moves = [(1, -1), (1, 0), (1, 1), (0, 1), (-1, 1), (-1, 0), (-1, -1), (0, -1)]
+            ode_count = 0
+            for i in xrange(self.height):
+                for j in xrange(self.width):
+                    if field[i][j] == 3:
+                        for move in moves:
+                            x, y = i, j
+                            chessman_count = 0
+                            for m in xrange(num+1):
+                                if m == 0: s = 3
+                                elif m > 0 and m < (num+1): s = 1
+                                try:
+                                    if field[x][y] != s:
+                                        break
+                                except IndexError:
+                                    break
+                                x += move[0]
+                                y += move[1]
+                                if (x<0 or x>14 or y<0 or y>14) and chessman_count == num:
+                                    chessman_count += 1
+                                    break
+                                chessman_count += 1
+                            if chessman_count == (num+1):
+                                ode_count += 1
+            return ode_count
 
         def special_1(field):
             """check ? x x o x ? situation """
@@ -344,8 +356,6 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                if x < 0 or x >14 or y < 0 or y > 14:
-                                    break
                                 chessman_count += 1
                             if chessman_count == 6:
                                 return True
@@ -370,8 +380,6 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                if x < 0 or x >14 or y < 0 or y > 14:
-                                    break
                                 chessman_count += 1
                             if chessman_count == 5:
                                 return True
@@ -396,8 +404,6 @@ class GameField(object):
                                     break
                                 x += move[0]
                                 y += move[1]
-                                if x < 0 or x >14 or y < 0 or y > 14:
-                                    break
                                 chessman_count += 1
                             if chessman_count == 5:
                                 return True
@@ -448,28 +454,38 @@ class GameField(object):
                     de3_count = check_destroy(self.field, 3)
                     de2_count = check_destroy(self.field, 2)
                     de1_count = check_destroy(self.field, 1)
+                    ode4_count = check_out_destroy(self.field, 4)
+                    ode3_count = check_out_destroy(self.field, 3)
+                    ode2_count = check_out_destroy(self.field, 2)
+                    ode1_count = check_out_destroy(self.field, 1)
                     c4_count = check_cut(self.field, 4)
                     c3_count = check_cut(self.field, 3)
                     c2_count = check_cut(self.field, 2)
                     c1_count = check_cut(self.field, 1)
 
                     # DEBUG LOG
-                    # if l4_count: print('l4: %d' % l4_count)
-                    # if l3_count: print('l3: %d' % l3_count)
-                    # if l2_count: print('l2: %d' % l2_count)
-                    # if l1_count: print('l1: %d' % l1_count)
-                    # if d4_count: print('d4: %d' % d4_count)
-                    # if d3_count: print('d3: %d' % d3_count)
-                    # if d2_count: print('d2: %d' % d2_count)
-                    # if d1_count: print('d1: %d' % d1_count)
-                    # if de4_count: print('de4: %d' % de4_count)
-                    # if de3_count: print('de3: %d' % de3_count)
-                    # if de2_count: print('de2: %d' % de2_count)
-                    # if de1_count: print('de1: %d' % de1_count)
-                    # if c4_count: print('c4: %d' % c4_count)
-                    # if c3_count: print('c3: %d' % c3_count)
-                    # if c2_count: print('c2: %d' % c2_count)
-                    # if c1_count: print('c1: %d' % c1_count)
+                    # print('({row}:{col})'.format(row=i, col=j))
+                    # if l4_count: print('l4: %d' % l4_count),
+                    # if l3_count: print('l3: %d' % l3_count),
+                    # if l2_count: print('l2: %d' % l2_count),
+                    # if l1_count: print('l1: %d' % l1_count),
+                    # if d4_count: print('d4: %d' % d4_count),
+                    # if d3_count: print('d3: %d' % d3_count),
+                    # if d2_count: print('d2: %d' % d2_count),
+                    # if d1_count: print('d1: %d' % d1_count),
+                    # if de4_count: print('de4: %d' % de4_count),
+                    # if de3_count: print('de3: %d' % de3_count),
+                    # if de2_count: print('de2: %d' % de2_count),
+                    # if de1_count: print('de1: %d' % de1_count),
+                    # if ode4_count: print('de4: %d' % de4_count),
+                    # if ode3_count: print('de3: %d' % de3_count),
+                    # if ode2_count: print('de2: %d' % de2_count),
+                    # if ode1_count: print('de1: %d' % de1_count),
+                    # if c4_count: print('c4: %d' % c4_count),
+                    # if c3_count: print('c3: %d' % c3_count),
+                    # if c2_count: print('c2: %d' % c2_count),
+                    # if c1_count: print('c1: %d' % c1_count),
+                    # print('\n'),
 
 
                     # Special Checks
@@ -482,6 +498,11 @@ class GameField(object):
                     ipoint += de3_count*100
                     ipoint += de2_count*37
                     ipoint += de1_count*8
+
+                    ipoint += ode4_count*500
+                    ipoint += ode3_count*100
+                    ipoint += ode2_count*37
+                    ipoint += ode1_count*8
 
                     ipoint += c4_count*100
                     ipoint += c3_count*90
