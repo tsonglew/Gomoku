@@ -3,6 +3,7 @@
 
 
 import curses
+import sys
 from collections import defaultdict
 from gamefield import GameField
 
@@ -24,7 +25,16 @@ def get_user_action(keyboard):
 
 def main(stdscr):
     def init():
-        game_field.reset()
+        if len(sys.argv) > 1:
+            name1 = sys.argv[1]
+            if len(sys.argv) > 2:
+                name2 = sys.argv[2]
+            else:
+                name2 = 'Player2'
+        else:
+            name1 = 'Player1'
+            name2 = 'Player2'
+        game_field.reset(name1=name1, name2=name2)
         return 'Game'
 
     def addai():

@@ -8,20 +8,20 @@ except NameError:
 
 
 class GameField(object):
-    def __init__(self, height=15, width=15):
+    def __init__(self, name1='Player1', name2='Player2', height=15, width=15):
         self.width = width
         self.height = height
         self.mode = 1
         self.point = 0
         self.concede = 0
         self.current_player = 1
-        self.player_name_1 = 'Player1'
-        self.player_name_2 = 'Player2'
+        self.player_name_1 = name1
+        self.player_name_2 = name2
         self.player_name_3 = 'Computer'
         self.field = [[0 for i in xrange(width)] for j in xrange(height)]
         self.current = {'row':7, 'col':7}
         self.winner = 0
-        self.reset()
+        self.reset(name1=name1, name2=name2)
 
 
     def show(self):
@@ -43,16 +43,16 @@ class GameField(object):
         else:
             return 0
 
-    def reset(self):
+    def reset(self, name1, name2):
         """Reset the chessboard for next round"""
         for i in xrange(self.height):
             for j in xrange(self.width):
                 self.field[i][j] = 0
         self.current['row'] = 7
         self.current['col'] = 7
+        self.player_name_1 = name1
+        self.player_name_2 = name2
         self.mode = 1
-        self.player_name_1 = 'Player1'
-        self.player_name_2 = 'Player2'
         self.current_player = 1
         self.point = 0
         self.concede = 0
@@ -307,7 +307,7 @@ class GameField(object):
                                     except IndexError:
                                         x += move[0]
                                         y += move[1]
-                                        chessman_count += 2
+                                        chessman_count += 1
                                         break
                                 elif m > 0 and m < num+1:
                                     try:

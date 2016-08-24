@@ -4,6 +4,7 @@
 ### Steps
  * Clone this repository `git clone https://github.com/kasheemlew/Gomoku.git`
  * Execute `python main.py` to start the game
+ * Execute `python main.py <name1> <name2>` to DIY the players' names
 
 ### Attention:
 
@@ -22,4 +23,4 @@
 
 - [x] Play with your friend
 - [x] Play with the computer
-- [ ] With UI
+- ~~[ ] With UI~~
