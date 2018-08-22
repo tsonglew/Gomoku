@@ -28,5 +28,5 @@
 ### Screenshot
 
 
-[![](http://p4dq6rjze.bkt.clouddn.com/IMG20180822_103838.png)](http://p4dq6rjze.bkt.clouddn.com/20180822_102549.mp4")
+[![](http://p4dq6rjze.bkt.clouddn.com/IMG20180822_103838.png)](http://p4dq6rjze.bkt.clouddn.com/20180822_102549.mp4)
 
